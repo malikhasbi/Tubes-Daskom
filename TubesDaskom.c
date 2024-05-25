@@ -16,6 +16,12 @@ struct
     int tb, bb, usia, saldo;
 } pelanggan;
 
+struct
+{
+    char namaalat[100];
+    int hargaalat;
+} alat;
+
 // funsi pengurus start
 int loginpengurus();
 int menupengurus();
@@ -24,6 +30,9 @@ int lihatsaldo();
 int riwayatsewa();
 int datapelanggan();
 int hapuspelanggan();
+int tambahalat();
+int hapusalat();
+int editalat();
 // funsi pengurus end
 
 // fungsi pelanggan start
@@ -31,8 +40,15 @@ int mainpelanggan();
 int registrasipelanggan();
 int loginpelanggan();
 int menupelanggan();
+int lihatalat();
+int sewaalat();
+int kalkulator();
+int topupsaldo();
+int lihatsaldo2();
+int riwayatsewa2();
 // fungsi pelanggan end
 
+// start main
 int main()
 {
     system("cls");
@@ -79,7 +95,6 @@ int loginpengurus()
         gets(username);
         printf("Masukan Password : ");
         gets(pass);
-
         // if (strcmp(username, "admin") == 0 && strcmp(pass, "123") == 0)
         if (a == 1)
         {
@@ -100,8 +115,9 @@ int loginpengurus()
 
 int menupengurus()
 {
-    system("cls");
     int i;
+
+    system("cls");
     printf("Selamat datang...\n\n");
     printf("Menu Pengurus :\n1. Melihat Data Pelanggan\n2. Menghapus Data Pelanggan\n3. Daftar Alat\n4. Melihat Saldo\n5. Riwayat Penyewaan\n6. Log Out");
     printf("\nPilih Menu : ");
@@ -137,6 +153,7 @@ int menupengurus()
 
 int datapelanggan()
 {
+
     FILE *daftarpelanggan;
     daftarpelanggan = fopen("daftarpelanggan.dat", "rb");
     if (daftarpelanggan == NULL)
@@ -210,11 +227,69 @@ int hapuspelanggan()
     }
 }
 
-int daftaralat(){}
+int daftaralat()
+{
+}
 
-int lihatsaldo() {}
+int tambahalat()
+{
+    FILE *daftaralat;
+    daftaralat = fopen("daftaralat.dat", "ab");
 
-int riwayatsewa() {}
+    printf("Nama Alat : ");
+    gets(alat.namaalat);
+    printf("Harga : ");
+    scanf("%d", &alat.hargaalat);
+
+    fwrite(&alat, sizeof(alat), 1, daftaralat);
+    fclose(daftaralat);
+}
+
+int hapusalat()
+{
+    FILE *daftaralat;
+    FILE *daftaralat2;
+    daftaralat = fopen("daftaralat.dat", "rb");
+    daftaralat2 = fopen("daftaralat2.dat", "wb");
+
+    if (fread(&alat, sizeof(alat), 1, daftaralat) == 0)
+    {
+        printf("\ndata tidak tersedia...");
+    }
+
+    char hapus[100];
+    printf("Nama alat yang di hapus : ");
+    gets(hapus);
+
+    while (fread(&alat, sizeof(alat), 1, daftaralat))
+    {
+        if (strcmp(alat.namaalat, hapus) != 0)
+        {
+            fread(&alat, sizeof(alat), 1, daftaralat2);
+            printf("data alat telah terhapus...");
+            menupengurus();
+            break;
+        }
+        else
+        {
+            printf("gagal menghapus...");
+            menupengurus();
+            break;
+        }
+    }
+    fclose(daftaralat);
+    fclose(daftaralat2);
+    remove("daftaralat.dat");
+    rename("daftaralat2.dat", "daftaralat.dat");
+}
+
+int lihatsaldo()
+{
+}
+
+int riwayatsewa()
+{
+}
 
 // end program pengurus
 
@@ -317,7 +392,31 @@ int loginpelanggan()
 
 int menupelanggan()
 {
-    printf("Menu :");
+}
+
+int lihatalat()
+{
+    FILE *daftaralat;
+    daftaralat = fopen("daftaralat.dat", "rb");
+    if (daftaralat == NULL)
+    {
+        printf("Gagal membuka file.");
+        return -1;
+    }
+    if (fread(&alat, sizeof(alat), 1, daftaralat) == 0)
+    {
+        printf("\ndata tidak tersedia...");
+    }
+    while (fread(&alat, sizeof(alat), 1, daftaralat))
+    {
+        printf("\nNama Alat : %s", alat.namaalat);
+        printf("\nHarga Alat : %s", alat.hargaalat);
+    }
+    fclose(daftaralat);
+
+    printf("\n\npress eny key to back...");
+    getchar();
+    menupelanggan();
 }
 
 // end program pelanggan
