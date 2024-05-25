@@ -614,10 +614,33 @@ int sewaalat()
     menupelanggan();
 }
 
-int kalkulator() {}
+int kalkulator(){
+    
+}
+int lihatsaldo2(){
+    FILE *saldo2;
+    saldo2 = fopen("saldo2.dat", "rb");
+    if (saldo2 == NULL)
+    {
+        printf("Gagal membuka file.");
+        menupelanggan();
+        return -1;
+    }
+    if (fread(&pelanggan, sizeof(pelanggan), 1, saldo2) == 0)
+    {
+        printf("\ndata tidak tersedia...");
+    }
+    else
+    {
+        while (fread(&pelanggan, sizeof(pelanggan), 1, saldo2))
+        {
 
-int topupsaldo() {}
-
-int lihatsaldo2() {}
-
+            printf("\nSaldo : %d", pelanggan.saldo);
+        }
+        fclose(saldo2);
+    }
+    printf("\n\npress eny key to back...");
+    getchar();
+    menupelanggan();
+}
 // end program pelanggan
